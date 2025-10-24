@@ -280,6 +280,34 @@
     <script src="lib/isotope/isotope.pkgd.min.js"></script>
     <script src="lib/lightbox/js/lightbox.min.js"></script>
 
+
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("YOUR_PUBLIC_KEY");
+  })();
+
+  document.getElementById("contactForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      mobile: document.getElementById("mobile").value,
+      subject: document.getElementById("subject").value,
+      message: document.getElementById("message").value
+    })
+    .then(function() {
+      alert("Message sent successfully!");
+      document.getElementById("contactForm").reset();
+    }, function(error) {
+      alert("Failed to send message. Try again later.");
+      console.log("EmailJS Error:", error);
+    });
+  });
+</script>
+
+    
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 </body>
