@@ -582,3 +582,88 @@
 .footer .copyright a:hover {
     color: var(--primary);
 }
+
+
+
+.solar-calculator-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+}
+
+.calculator-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.calculator-header h2 {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+.calculator-header p {
+  color: #555;
+}
+
+.badge {
+  display: inline-block;
+  background: #ffc107;
+  color: #000;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.calculator-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  border: none;
+  padding: 10px 22px;
+  border-radius: 30px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+  background: #198754;
+  color: #fff;
+}
+
+.calculator-content {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  padding: 15px;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.tab-panel iframe {
+  width: 100%;
+  height: 650px;
+  border: none;
+  border-radius: 12px;
+}
+
+.calculator-note {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 20px;
+}
