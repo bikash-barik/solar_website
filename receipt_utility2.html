@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Solar Project Money Receipt</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Solar Project Receipt Generator</h2>
+
+<!-- FORM -->
+<div class="form no-print">
+  <label>Plant Size</label>
+  <select id="plant_size">
+    <option>1 kw</option>
+    <option>2 kw</option>
+    <option>3 kw</option>
+    <option>4 kw</option>
+    <option>5 kw</option>
+  </select>
+
+ <label>Quantity</label>
+  <input type="number" id="qty">
+
+  <label>Customer Name</label>
+  <input type="text" id="customer_name">
+
+  <label>Mobile Number</label>
+  <input type="text" id="mobile">
+
+  <label>Address</label>
+  <textarea id="address"></textarea>
+
+  <label>Total Project Cost</label>
+  <input type="number" id="total_cost">
+
+  <label>Loan Amount (Approved)</label>
+  <input type="number" id="loan_amount">
+
+  <label>Margin Payment</label>
+  <input type="number" id="margin_payment">
+
+  <label>Cash Received</label>
+  <input type="number" id="cash_received">
+
+
+  <button onclick="generateReceipt()">Generate Receipt</button>
+</div>
+
+<!-- RECEIPT -->
+<div class="receipt" id="receipt">
+
+  <div class="header">
+    <img src="images/image.png" class="logo">
+    <div class="company">
+      📞 +91 9124318222<br>
+      🌐 pragatiecosolar.in<br>
+      📍 HIG-42, Marutivilla Phase 1, Aryapalli,<br>
+KIIT Road, Patia, Bhubaneswar - 751024<br>
+     GSTIN:- 21ABIFP1344D1ZS
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="meta">
+    <div><strong>Receipt No:</strong> <span id="receipt_no"></span></div>
+    <div><strong>Date:</strong> <span id="receipt_date"></span></div>
+  </div>
+
+  <p>
+
+    To: <span id="out_customer"></span><br>
+    <span id="out_address"></span><br>
+    Mobile: <span id="out_mobile"></span><br>
+    Subject: Receipt
+  </p>
+
+  <p>Our Fees of solar installation is  <span id="amount_words"></span> for
+installation of <span class="out_plant"></span> on grid solar system.</p>
+
+  <table>
+    <tr>
+      <th>Item Description</th>
+      <th>Qty</th>
+      <th>Total</th>
+    </tr>
+    <tr>
+      <td><span class="out_plant"></span> On-Grid Solar System</td>
+      <td id="out_qty"></td>
+      <td id="out_total_cost"></td>
+    </tr>
+    <tr>
+      <td> Loan Amount </td>
+      <td>-</td>
+      <td id="out_loan"></td>
+    </tr>
+    <tr>
+      <td> Margin Payment</td>
+      <td>-</td>
+      <td id="out_margin"></td>
+    </tr>
+      <tr>
+      <td>Remaining Loan Amount</td>
+      <td>-</td>
+      <td id="out_remaining"></td>
+    </tr>
+      <tr>
+      <td>Cash Amount Received</td>
+      <td>-</td>
+      <td id="out_cash"></td>
+    </tr>
+  </table>
+
+ <p>Best Regards, Pragati EcoSolar</p>
+
+  <div class="sign">
+    <div>
+     Operation Executive, Pratap Ku. Das
+    </div>
+    <div>
+      Customer Signature
+    </div>
+  </div>
+
+</div>
+
+<button id="pdfBtn" class="no-print download-btn" onclick="printPDF()" disabled style="display:none;">
+  Download / Print PDF
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>
