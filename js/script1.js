@@ -34,6 +34,7 @@ function generateAgreement() {
 
   // Enable PDF button
   pdfBtn.disabled = false;
+  pdfBtn.style.display = "inline-block";
 }
 
 // Print to PDF (clean output)
