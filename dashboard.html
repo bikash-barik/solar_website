@@ -414,8 +414,17 @@
       <h2>🔐 Pragati EcoSolar</h2>
       <p>Internal Dashboard Login</p>
 
-      <input type="text" id="username" placeholder="Username" autocomplete="username">
+           <input type="email" id="email" placeholder="Email" autocomplete="username">
       <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+
+ <button onclick="register()">Register</button><br>
+
+<button onclick="resetPassword()" style="margin-top:8px;background:#eee;color:#333">
+  Forgot Password?
+</button>
+
+
+  <p id="msg"></p>
 
       <button onclick="login()">Login</button>
       <div id="loginError" class="login-error"></div>
@@ -553,70 +562,165 @@
 
   </div>
 
-  <script>
-    // Dashboard search filter
-    function filterCards() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const cards = document.querySelectorAll(".card");
+  <script type="module">
+/* =======================
+   FIREBASE IMPORTS
+======================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-      cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        card.style.display = text.includes(input) ? "" : "none";
-      });
-    }
+/* =======================
+   FIREBASE CONFIG
+======================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCyIakQ4jzv_z7k_yXvBliTOqg687ZKjHk",
+  authDomain: "pragati-dashboard.firebaseapp.com",
+  projectId: "pragati-dashboard",
+  storageBucket: "pragati-dashboard.firebasestorage.app",
+  messagingSenderId: "580069668292",
+  appId: "1:580069668292:web:70115744e2f5a83e016091",
+  measurementId: "G-MYV9XGW3X1"
+};
 
-    // ✅ HARD-CODED LOGIN (Change these anytime)
-    const HARD_USER = "pragati";
-    const HARD_PASS = "solar@123";
+/* =======================
+   INIT
+======================= */
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    function showDashboard() {
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-    }
+/* =======================
+   UI HELPERS
+======================= */
+function showDashboard() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+}
 
-    function showLogin() {
-      document.getElementById("dashboard").style.display = "none";
-      document.getElementById("loginPage").style.display = "flex";
-      document.getElementById("loginError").innerText = "";
-      document.getElementById("password").value = "";
-    }
+function showLogin() {
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("loginPage").style.display = "flex";
+}
 
-    function login() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value;
+/* =======================
+   LOGIN
+======================= */
+window.login = function () {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const error = document.getElementById("loginError");
 
-      const error = document.getElementById("loginError");
-      error.innerText = "";
+  error.innerText = "";
 
-      if (user === HARD_USER && pass === HARD_PASS) {
-        sessionStorage.setItem("loggedIn", "true");
-        showDashboard();
-      } else {
-        error.innerText = "❌ Invalid username or password";
-      }
-    }
+  if (!email || !password) {
+    error.innerText = "⚠️ Email and password required";
+    return;
+  }
 
-    function logout() {
-      sessionStorage.removeItem("loggedIn");
-      showLogin();
-    }
-
-    // Enter key login
-    document.addEventListener("keydown", function (e) {
-      if (document.getElementById("loginPage").style.display !== "none") {
-        if (e.key === "Enter") login();
-      }
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      showDashboard();
+    })
+    .catch(err => {
+      error.innerText = "❌ " + err.message;
     });
+};
 
-    // Keep user logged in on refresh
-    window.onload = function () {
-      if (sessionStorage.getItem("loggedIn") === "true") {
-        showDashboard();
-      } else {
-        showLogin();
-      }
-    };
-  </script>
+/* =======================
+   REGISTER
+======================= */
+window.register = function () {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const error = document.getElementById("loginError");
+
+  error.innerText = "";
+
+  if (!email || !password) {
+    error.innerText = "⚠️ Email and password required";
+    return;
+  }
+
+  if (password.length < 6) {
+    error.innerText = "⚠️ Password must be at least 6 characters";
+    return;
+  }
+
+  createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      alert("✅ Account created successfully");
+      showDashboard();
+    })
+    .catch(err => {
+      error.innerText = "❌ " + err.message;
+    });
+};
+
+/* =======================
+   LOGOUT
+======================= */
+window.logout = function () {
+  signOut(auth).then(() => {
+    showLogin();
+  });
+};
+
+/* =======================
+   PASSWORD RESET (EMAIL OTP)
+======================= */
+window.resetPassword = function () {
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    alert("⚠️ Enter your email first");
+    return;
+  }
+
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      alert("📩 Password reset link sent to your email");
+    })
+    .catch(err => {
+      alert("❌ " + err.message);
+    });
+};
+
+/* =======================
+   AUTO LOGIN ON REFRESH
+======================= */
+onAuthStateChanged(auth, user => {
+  if (user) {
+    showDashboard();
+  } else {
+    showLogin();
+  }
+});
+
+/* =======================
+   ENTER KEY LOGIN
+======================= */
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter") login();
+});
+
+/* =======================
+   SEARCH FILTER
+======================= */
+window.filterCards = function () {
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(input)
+      ? ""
+      : "none";
+  });
+};
+</script>
 
 </body>
 </html>
