@@ -347,6 +347,8 @@ body.dark{
   transition:.25s;
 }
 
+  .links a{display:block;color:#38bdf8;text-decoration:none;margin:6px 0}
+iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
 </style>
 </head>
 
@@ -360,8 +362,8 @@ body.dark{
 <!-- ================= LOGIN ================= -->
 <div id="loginPage" class="login-wrapper">
   <div class="login-box">
-    <h2>Pragati EcoSolar</h2>
-    <p>Internal Dashboard Login</p>
+    <h2 style="color: #1f2937;">Pragati EcoSolar</h2>
+    <p style="color: #6b7280;">Internal Dashboard Login</p>
 
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
@@ -530,11 +532,16 @@ body.dark{
         <span class="tag">Sizing</span>
       </div>
       <p>Calculate system size & savings.</p>
-      <div class="links">
+      <!-- <div class="links">
         <a href="hybridsolar.html" target="_blank">Hybrid Solar Calculator</a>
         <a href="ongridsolar.html" target="_blank">Ongrid Savings Calculator</a>
         <a href="3 kW Ongrid.html" target="_blank">3 kW Ongrid Calculator</a>
-      </div>
+      </div> -->
+       <div class="links">
+  <a href="#" onclick="loadPage('hybridsolar')">Hybrid Solar Calculator</a>
+  <a href="#" onclick="loadPage('ongridsolar')">Ongrid Savings Calculator</a>
+  <a href="#" onclick="loadPage('3kwongrid')">3 kW Ongrid Calculator</a>
+</div>
     </article>
 
     <article class="card" data-category="dashboard utility">
@@ -544,15 +551,42 @@ body.dark{
         <span class="tag">Documents</span>
       </div>
       <p>Generate receipts and vendor agreements.</p>
-      <div class="links">
+      <!-- <div class="links">
         <a href="receipt_utility2.html" target="_blank">Money Receipt Generator</a>
         <a href="vedor_utility.html" target="_blank">Vendor Agreement Generator</a>
+      </div> -->
+        <div class="links">
+         <a href="#" onclick="loadPage('moneyreceipt')">Money Receipt Generator</a>
+          <a href="#" onclick="loadPage('vendor')">Vendor Agreement Generator</a>
       </div>
     </article>
     </section>
   </main>
 
 </div>
+  <hr>
+<!-- 🔒 PROTECTED CONTENT AREA -->
+  <iframe id="toolFrame"></iframe>
+
+
+<script>
+function loadPage(page) {
+  if (!window.auth || !auth.currentUser) {
+    alert("❌ Login required");
+    return;
+  }
+
+  const pages = {
+    hybridsolar: "_hybridsolar.html",
+    ongridsolar: "_ongridsolar.html",
+    "3kwongrid": "_3kw_ongrid.html",
+    moneyreceipt: "_receipt.html",
+    vendor: "_vendor.html",
+  };
+
+  toolFrame.src = pages[page];
+}
+</script>
 
 <script>
 function updateStats() {
