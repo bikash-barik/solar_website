@@ -1,1 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+  // ❌ Block direct access
+  if (window.top === window.self) {
+    document.body.innerHTML = `
+      <div style="display:flex;height:100vh;align-items:center;
+      justify-content:center;font-family:Poppins;background:#020617;color:#fff">
+        <h2>❌ Access denied<br><small>Open via Dashboard only</small></h2>
+      </div>`;
+    throw new Error("Blocked");
+  }
+</script>
+<meta charset="UTF-8">
+<title>Solar Project Money Receipt</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
 
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.form label {
+  display: block;
+  margin-top: 10px;
+}
+
+.form input, .form textarea, .form select {
+  width: 100%;
+  padding: 6px;
+}
+
+.receipt {
+  background: #fff;
+  padding: 25px;
+  margin-top: 30px;
+  display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  height: 70px;
+}
+
+.company {
+  text-align: right;
+  font-size: 14px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+table, th, td {
+  border: 1px solid #000;
+}
+
+th, td {
+  padding: 8px;
+}
+
+.amount-box {
+  margin-top: 15px;
+}
+
+.sign {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 100px;
+}
+
+.no-print {
+  margin-top: 20px;
+  display: block;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+button {
+  padding: 10px 20px;
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #084298;
+}
+
+.download-btn {
+  background: #198754;
+}
+
+
+
+
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Solar Project Receipt Generator</h2>
+
+<!-- FORM -->
+<div class="form no-print">
+  <label>Plant Size</label>
+  <select id="plant_size">
+    <option>1 kw</option>
+    <option>2 kw</option>
+    <option>3 kw</option>
+    <option>4 kw</option>
+    <option>5 kw</option>
+  </select>
+
+ <label>Quantity</label>
+  <input type="number" id="qty">
+
+  <label>Customer Name</label>
+  <input type="text" id="customer_name">
+
+  <label>Mobile Number</label>
+  <input type="text" id="mobile">
+
+  <label>Address</label>
+  <textarea id="address"></textarea>
+
+  <label>Total Project Cost</label>
+  <input type="number" id="total_cost">
+
+  <label>Loan Amount (Approved)</label>
+  <input type="number" id="loan_amount">
+
+  <label>Margin Payment</label>
+  <input type="number" id="margin_payment">
+
+  <label>Cash Received</label>
+  <input type="number" id="cash_received">
+
+
+  <button onclick="generateReceipt()">Generate Receipt</button>
+</div>
+
+<!-- RECEIPT -->
+<div class="receipt" id="receipt">
+
+  <div class="header">
+    <img src="img/image.png" class="logo">
+    <div class="company">
+      📞 +91 9124318222<br>
+      🌐 pragatiecosolar.in<br>
+      📍 HIG-42, Marutivilla Phase 1, Aryapalli,<br>
+KIIT Road, Patia, Bhubaneswar - 751024<br>
+     GSTIN:- 21ABIFP1344D1ZS
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="meta">
+    <div><strong>Receipt No:</strong> <span id="receipt_no"></span></div>
+    <div><strong>Date:</strong> <span id="receipt_date"></span></div>
+  </div>
+
+  <p>
+
+    To: <span id="out_customer"></span><br>
+    <span id="out_address"></span><br>
+    Mobile: <span id="out_mobile"></span><br>
+    Subject: Receipt
+  </p>
+
+  <p>Our Fees of solar installation is  <span id="amount_words"></span> for
+installation of <span class="out_plant"></span> on grid solar system.</p>
+
+  <table>
+    <tr>
+      <th>Item Description</th>
+      <th>Qty</th>
+      <th>Total</th>
+    </tr>
+    <tr>
+      <td><span class="out_plant"></span> On-Grid Solar System</td>
+      <td id="out_qty"></td>
+      <td id="out_total_cost"></td>
+    </tr>
+    <tr>
+      <td> Loan Amount </td>
+      <td>-</td>
+      <td id="out_loan"></td>
+    </tr>
+    <tr>
+      <td> Margin Payment</td>
+      <td>-</td>
+      <td id="out_margin"></td>
+    </tr>
+      <tr>
+      <td>Remaining Loan Amount</td>
+      <td>-</td>
+      <td id="out_remaining"></td>
+    </tr>
+      <tr>
+      <td>Cash Amount Received</td>
+      <td>-</td>
+      <td id="out_cash"></td>
+    </tr>
+  </table>
+
+ <p>Best Regards, Pragati EcoSolar</p>
+
+  <div class="sign">
+    <div>
+     Operation Executive, Pratap Ku. Das
+    </div>
+    <div>
+      Customer Signature
+    </div>
+  </div>
+
+</div>
+
+<button id="pdfBtn" class="no-print download-btn" onclick="printPDF()" disabled style="display:none;">
+  Download / Print PDF
+</button>
+
+<script src="js/script.js"></script>
+</body>
+</html>
