@@ -1,571 +1,762 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard | Pragati EcoSolar</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Pragati EcoSolar | Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Optional: nicer font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --primary: #ffb300;
-      --primary-dark: #f57c00;
-      --accent: #0288d1;
-      --bg: #fffdf5;
-      --card-bg: #ffffff;
-      --text-main: #212121;
-      --text-muted: #616161;
-      --radius-lg: 18px;
-      --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.08);
-      --shadow-strong: 0 14px 30px rgba(0, 0, 0, 0.14);
-    }
+<style>
+:root{
+  --brand:#0f172a;
+  --accent:#2563eb;
+  --bg:#f1f5f9;
+  --card:#ffffff;
+  --border:rgba(0,0,0,.08);
+  --text:#1f2937;
+  --muted:#6b7280;
+}
 
-    * { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #fff8e1 0, #fffdf5 45%, #ffffff 100%);
-      color: var(--text-main);
-    }
+body{
+  margin:0;
+  font-family:Poppins,system-ui;
+  background:var(--bg);
+  color:var(--text);
+}
 
-    /* HEADER */
-    header {
-      background: linear-gradient(120deg, #ffb300, #ffd54f);
-      padding: 0.9rem 1.6rem;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+/* ================= LOGIN ================= */
+.login-wrapper{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.login-box{
+  background:#fff;
+  width:360px;
+  padding:30px;
+  border-radius:18px;
+  box-shadow:0 30px 70px rgba(0,0,0,.18);
+}
+.login-box h2{margin:0 0 6px}
+.login-box p{margin:0 0 18px;font-size:.85rem;color:var(--muted)}
+.login-box input{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+.login-box button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-secondary{margin-top:8px;background:#e5e7eb}
+.btn-link{margin-top:10px;background:none;color:var(--accent)}
+.error{margin-top:10px;color:#dc2626;font-size:.85rem}
 
-    .header-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
+/* ================= APP LAYOUT ================= */
+#appLayout{
+  display:none;
+  min-height:100vh;
+}
 
-    header img.logo {
-      height: 52px;
-      border-radius: 10px;
-      background: #fff3cd;
-      padding: 4px 8px;
-    }
+/* ================= SIDEBAR ================= */
+.sidebar{
+  width:240px;
+  background:var(--brand);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  padding:22px;
+}
+.sidebar h2{
+  margin:0 0 24px;
+  font-size:1.2rem;
+}
+.sidebar a{
+  color:#e5e7eb;
+  text-decoration:none;
+  padding:10px 12px;
+  border-radius:10px;
+  margin-bottom:6px;
+  display:block;
+  font-size:.9rem;
+}
+.sidebar a:hover{
+  background:rgba(255,255,255,.12);
+}
+.sidebar-footer{
+  margin-top:auto;
+  font-size:.75rem;
+  opacity:.85;
+}
 
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+/* ================= MAIN ================= */
+.main{
+  flex:1;
+  padding:30px;
+}
 
-    .brand-title {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
+/* TOPBAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.logout{
+  background:#dc2626;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
 
-    .brand-subtitle {
-      margin: 0;
-      font-size: 0.85rem;
-      font-weight: 400;
-      color: #4e342e;
-      letter-spacing: 0.02em;
-    }
+.section-title{
+  margin:30px 0 14px;
+  font-size:1.4rem;
+}
 
-    /* PAGE WRAPPER */
-    .page {
-      max-width: 1100px;
-      margin: 20px auto 30px;
-      padding: 0 16px 24px;
-    }
+/* CARD GRID */
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  transition:.25s ease;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 25px 55px rgba(0,0,0,.18);
+}
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.card-header h3{
+  margin:0;
+  font-size:1.05rem;
+}
+.tag{
+  font-size:.7rem;
+  padding:4px 10px;
+  border-radius:20px;
+  background:#e0e7ff;
+  color:#3730a3;
+}
+.card p{
+  margin:12px 0;
+  font-size:.85rem;
+  color:var(--muted);
+}
+.links a{
+  display:block;
+  margin-top:8px;
+  color:var(--accent);
+  font-weight:500;
+  text-decoration:none;
+}
+.links a:hover{text-decoration:underline}
 
-    /* TOP INFO BAR */
-    .top-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
 
-    .welcome {
-      font-size: 1.1rem;
-      color: var(--text-main);
-    }
+.menu-btn{
+  display:none;
+  font-size:1.4rem;
+  background:none;
+  border:none;
+  cursor:pointer;
+}
 
-    .status-pill {
-      font-size: 0.8rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(76, 175, 80, 0.1);
-      color: #2e7d32;
-      border: 1px solid rgba(76, 175, 80, 0.4);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
+@media(max-width:900px){
+  .menu-btn{display:block}
 
-    /* SEARCH */
-    .search-bar-wrapper {
-      margin: 10px 0 18px;
-    }
+  .sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    bottom:0;
+    transition:.3s;
+    z-index:999;
+  }
+  .sidebar.open{
+    left:0;
+  }
+}
 
-    .search-label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
 
-    .search-bar {
-      position: relative;
-      max-width: 380px;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;
+  margin-bottom:30px;
+}
 
-    .search-bar input {
-      width: 100%;
-      padding: 11px 40px 11px 16px;
-      font-size: 0.95rem;
-      border-radius: 999px;
-      border: 1.5px solid rgba(255, 179, 0, 0.7);
-      outline: none;
-      background: rgba(255, 253, 245, 0.9);
-      box-shadow: var(--shadow-soft);
-      transition: 0.25s ease;
-    }
+.stat-card{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:#fff;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 20px 40px rgba(37,99,235,.35);
+}
 
-    .search-bar input::placeholder { color: #9e9e9e; }
+.stat-card h3{
+  margin:0;
+  font-size:.9rem;
+  opacity:.85;
+}
 
-    .search-bar input:focus {
-      border-color: var(--primary-dark);
-      box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.3);
-      background: #ffffff;
-    }
+.stat-card p{
+  margin:10px 0 0;
+  font-size:1.8rem;
+  font-weight:600;
+}
 
-    .search-icon {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      opacity: 0.7;
-    }
 
-    /* GRID */
-    .section-title {
-      margin: 20px 0 10px;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
+body.dark{
+  --bg:#020617;
+  --card:#020617;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --border:rgba(255,255,255,.08);
+}
+.card {
+  transition: all 0.25s ease;
+}
 
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
-    }
+.card.hide {
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+  display: none;
+}
 
-    .card {
-      background: var(--card-bg);
-      padding: 18px 17px 16px;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(255, 193, 7, 0.2);
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-      position: relative;
-      overflow: hidden;
-    }
+.card.show {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+}
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at top right, rgba(255, 224, 130, 0.4), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
+.sidebar{
+  width:240px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(15, 23, 42, 0.65);
+  border-right: 1px solid rgba(255,255,255,0.12);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  padding:22px;
+}
+.sidebar a{
+  color:#e5e7eb;
+  text-decoration:none;
+  padding:12px 14px;
+  border-radius:14px;
+  margin-bottom:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:.9rem;
+  transition:.25s;
+}
 
-    .card:hover::before { opacity: 1; }
+.sidebar a:hover,
+.sidebar a.active{
+  background: rgba(255,255,255,0.18);
+}
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-strong);
-      border-color: rgba(255, 193, 7, 0.6);
-    }
+.sidebar .count{
+  background: rgba(255,255,255,0.18);
+  padding:2px 8px;
+  border-radius:999px;
+  font-size:.7rem;
+}
+.fav-btn{
+  background:none;
+  border:none;
+  font-size:1.1rem;
+  cursor:pointer;
+  opacity:.4;
+  transition:.2s;
+}
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.4rem;
-      margin-bottom: 10px;
-    }
+.fav-btn.active{
+  opacity:1;
+  transform: scale(1.15);
+}
+.card.recommended::before{
+  content:"🧠 Recommended";
+  position:absolute;
+  top:14px;
+  right:14px;
+  font-size:.7rem;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#fff;
+  padding:4px 10px;
+  border-radius:999px;
+  box-shadow:0 6px 18px rgba(34,197,94,.4);
+}
+.card{
+  position:relative;
+  overflow:hidden;
+}
 
-    .card h3 {
-      margin: 0;
-      font-size: 1.05rem;
-      color: #e65100;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-weight: 600;
-    }
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(
+    600px circle at var(--x,50%) var(--y,50%),
+    rgba(255,255,255,.08),
+    transparent 40%
+  );
+  opacity:0;
+  transition:.25s;
+  
+  pointer-events: none;
+}
 
-    .tag {
-      font-size: 0.75rem;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(2, 136, 209, 0.06);
-      color: #01579b;
-      border: 1px solid rgba(2, 136, 209, 0.25);
-      white-space: nowrap;
-    }
 
-    .card p {
-      margin: 4px 0 10px;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
 
-    .links {
-      margin-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: flex-start;
-    }
+.card:hover::after{
+  opacity:1;
+}
 
-    .card a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.9rem;
-      color: var(--accent);
-      font-weight: 500;
-      text-decoration: none;
-      padding-bottom: 2px;
-      border-bottom: 1px dashed transparent;
-      position: relative;
-    }
+.card:hover{
+  transform:translateY(-6px) scale(1.01);
+  box-shadow:0 35px 80px rgba(0,0,0,.25);
+}
+.card:hover h3{
+  transform:translateX(4px);
+  transition:.25s;
+}
 
-    .card a::after {
-      content: "↗";
-      font-size: 0.75rem;
-      opacity: 0;
-      transform: translateX(-2px);
-      transition: 0.2s ease;
-    }
-
-    .card a:hover { border-color: rgba(129, 212, 250, 0.9); }
-
-    .card a:hover::after {
-      opacity: 0.9;
-      transform: translateX(1px);
-    }
-
-    /* FOOTER */
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      padding: 12px 8px 18px;
-      color: #6d4c41;
-    }
-
-    footer span { font-weight: 500; }
-
-    @media (max-width: 600px) {
-      .header-inner {
-        flex-direction: row;
-        justify-content: flex-start;
-      }
-      .brand-title { font-size: 1.35rem; }
-      .page { margin-top: 16px; }
-    }
-
-    /* LOGIN PAGE */
-    .login-wrapper {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .login-box {
-      width: 360px;
-      background: var(--card-bg);
-      padding: 28px;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-strong);
-      text-align: center;
-      border: 1px solid rgba(255, 193, 7, 0.25);
-    }
-
-    .login-box img {
-      height: 54px;
-      margin-bottom: 8px;
-      border-radius: 10px;
-      background: #fff3cd;
-      padding: 6px 10px;
-    }
-
-    .login-box h2 {
-      margin: 8px 0 4px;
-      font-size: 1.35rem;
-      color: #e65100;
-    }
-
-    .login-box p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin: 0 0 18px;
-    }
-
-    .login-box input {
-      width: 100%;
-      padding: 12px 12px;
-      margin-bottom: 12px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(255, 179, 0, 0.45);
-      font-size: 0.95rem;
-      outline: none;
-      background: rgba(255, 253, 245, 0.95);
-      transition: 0.25s ease;
-    }
-
-    .login-box input:focus {
-      border-color: var(--primary-dark);
-      box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.25);
-      background: #ffffff;
-    }
-
-    .login-box button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 14px;
-      border: none;
-      background: var(--primary);
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .login-box button:hover { background: var(--primary-dark); }
-
-    .login-error {
-      margin-top: 10px;
-      color: #d32f2f;
-      font-size: 0.85rem;
-      min-height: 18px;
-    }
-
-    .login-hint {
-      margin-top: 12px;
-      font-size: 0.78rem;
-      color: #8d6e63;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-
-    .btn-small {
-      border: 1px solid rgba(0,0,0,0.08);
-      background: rgba(255,255,255,0.7);
-      padding: 8px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.85rem;
-      box-shadow: var(--shadow-soft);
-      transition: 0.2s ease;
-    }
-
-    .btn-small:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-strong);
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-  <!-- LOGIN PAGE -->
-  <div id="loginPage" class="login-wrapper">
-    <div class="login-box">
-      <img src="https://www.pragatiecosolar.in/logo.png" alt="Pragati EcoSolar Logo"
-           onerror="this.style.display='none'">
-      <h2>🔐 Pragati EcoSolar</h2>
-      <p>Internal Dashboard Login</p>
-
-           <input type="email" id="email" placeholder="Email" autocomplete="username">
-      <input type="password" id="password" placeholder="Password" autocomplete="current-password">
-
- <button onclick="register()">Register</button><br>
-
-<button onclick="resetPassword()" style="margin-top:8px;background:#eee;color:#333">
-  Forgot Password?
-</button>
 
 
-  <p id="msg"></p>
 
-      <button onclick="login()">Login</button>
-      <div id="loginError" class="login-error"></div>
 
-      <div class="login-hint">Tip: Press <b>Enter</b> to login.</div>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginPage" class="login-wrapper">
+  <div class="login-box">
+    <h2>Pragati EcoSolar</h2>
+    <p>Internal Dashboard Login</p>
+
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <button class="btn-primary" onclick="login()">Login</button>
+    <button class="btn-secondary" onclick="register()">Register</button>
+    <button class="btn-link" onclick="resetPassword()">Forgot Password?</button>
+
+    <div id="loginError" class="error"></div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="appLayout">
+
+
+ <!-- SIDEBAR -->
+<aside class="sidebar">
+  <h2>⚡ Pragati</h2>
+
+  <a href="#" data-filter="all" class="active">
+  🏠 Dashboard <span class="count"></span>
+</a>
+
+<a href="#" data-filter="reports">
+  📊 Reports <span class="count"></span>
+</a>
+
+<a href="#" data-filter="billing">
+  🧾 Billing <span class="count"></span>
+</a>
+
+<a href="#" data-filter="utility">
+  🛠 Utilities <span class="count"></span>
+</a>
+
+
+  <div class="sidebar-footer">
+    Logged in as<br>
+    <strong id="userEmailSidebar"></strong>
+  </div>
+</aside>
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+        <input 
+  type="text"
+  id="searchInput"
+  placeholder="Search tools..."
+  style="
+    padding:10px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    outline:none;
+    min-width:220px;
+  "
+/>
+
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div>
+        <h1>Dashboard</h1>
+        <small id="userEmail"></small>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+      <button class="logout" onclick="logout()">Logout</button>
     </div>
   </div>
-
-  <!-- DASHBOARD (HIDDEN INITIALLY) -->
-  <div id="dashboard" style="display:none;">
-
-    <header>
-      <div class="header-inner">
-        <img class="logo" src="https://www.pragatiecosolar.in/logo.png"
-             alt="Pragati EcoSolar Logo"
-             onerror="this.style.display='none'">
-
-        <div class="brand-text">
-          <h1 class="brand-title">🌞 Pragati EcoSolar Dashboard</h1>
-          <p class="brand-subtitle">Quick access to tools, portals & calculators</p>
-        </div>
-      </div>
-    </header>
-
-    <main class="page">
-      <div class="top-row">
-        <div class="welcome">
-          Welcome! Use this panel to jump to all important solar tools.
-        </div>
-
-        <div class="top-actions">
-          <div class="status-pill">🟢 Live · Internal Use</div>
-          <button class="btn-small" onclick="logout()">🚪 Logout</button>
-        </div>
-      </div>
-
-      <!-- Search -->
-      <section class="search-bar-wrapper">
-        <div class="search-label">Search within sections & links</div>
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Type to filter: website, calculator, billing..."
-                 onkeyup="filterCards()">
-          <span class="search-icon">🔍</span>
-        </div>
-      </section>
-
-      <!-- Dashboard Cards -->
-      <h2 class="section-title">Quick Links</h2>
-      <section class="container" id="cardContainer">
-
-        <article class="card">
-          <div class="card-header">
-            <h3>🌐 Our Website</h3>
-            <span class="tag">Public</span>
-          </div>
-          <p>Main company website for customers & marketing.</p>
-          <div class="links">
-            <a href="https://www.pragatiecosolar.in/" target="_blank">Visit Pragati EcoSolar Website</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <h3>📚 Consumer Documentation</h3>
-            <span class="tag">Govt Portals</span>
-          </div>
-          <p>Official portals for PM SuryaGhar scheme and DCR-related documentation.</p>
-          <div class="links">
-            <a href="https://pmsuryaghar.gov.in/#/" target="_blank">PM SuryaGhar Portal</a>
-            <a href="https://solardcrportal.nise.res.in/" target="_blank">DCR Portal</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <h3>💳 Billing & Invoicing</h3>
-            <span class="tag">Internal</span>
-          </div>
-          <p>Create invoices, track payments & manage billing.</p>
-          <div class="links">
-            <a href="https://mybillbook.in/" target="_blank">Open MyBillBook</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <h3>🧾 Quotation Tools</h3>
-            <span class="tag">Proposals</span>
-          </div>
-          <p>Generate quotations using SolarBee and MyBillBook store.</p>
-          <div class="links">
-            <a href="https://onehub.solarbee.in/" target="_blank">SolarBee OneHub</a>
-            <a href="https://mybillbook.in/store/bhakti_solar_energy" target="_blank">MyBillBook Quotation Store</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <h3>🔢 Solar Calculators</h3>
-            <span class="tag">Sizing & Savings</span>
-          </div>
-          <p>Calculate system size, savings and returns for Odisha customers.</p>
-          <div class="links">
-            <a href="hybridsolar.html" target="_blank">
-              Hybrid Solar Calculator
-            </a>
-            <a href="ongridsolar.html"
-               target="_blank">
-              Odisha Ongrid Savings Calculator
-            </a>
-            <a href="3 kW Ongrid.html" target="_blank">
-              3 kW Ongrid Calculator
-            </a>
-          </div>
-        </article>
-
-          <article class="card">
-          <div class="card-header">
-             <h3>🛠 Utility</h3>
-             <span class="tag">Documents</span></span>
-          </div>
-         <p>Generate receipts and vendor agreements.</p>
-          <div class="links">
-            <a href="receipt_utility2.html" target="_blank">Money Receipt Generator</a>
-            <a href="vedor_utility.html" target="_blank">Vendor Agreement Generator</a>
-          </div>
-        </article>
-
-      </section>
-    </main>
-
-    <footer>
-      © <span>2025 Pragati EcoSolar</span>. All rights reserved.
-    </footer>
-
+<section class="stats">
+  <div class="stat-card">
+    <h3>👥 Users</h3>
+    <p id="statUsers">—</p>
   </div>
 
-  <script type="module">
-/* =======================
-   FIREBASE IMPORTS
-======================= */
+  <div class="stat-card">
+    <h3>🧾 Tools</h3>
+    <p id="statTools">0</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>🛠 Utilities</h3>
+    <p id="statUtilities">0</p>
+  </div>
+
+  <div class="stat-card">
+    <h3>🌐 Links</h3>
+    <p id="statLinks">0</p>
+  </div>
+</section>
+
+
+ 
+
+    <h2 class="section-title">Quick Links</h2>
+
+    <section class="container">
+       <article class="card" data-category="dashboard">
+
+      <div class="card-header">
+        <h3>🌐 Our Website</h3>
+        <button class="fav-btn" title="Pin"> ⭐</button>
+
+        <span class="tag">Public</span>
+      </div>
+      <p>Main company website for customers & marketing.</p>
+      <div class="links">
+        <a href="https://www.pragatiecosolar.in/" target="_blank">Visit Pragati EcoSolar Website</a>
+      </div>
+    </article>
+
+      <article class="card" data-category="dashboard">
+        <div class="card-header">
+            <h3>📚 Consumer Documentation</h3>
+            <button class="fav-btn" title="Pin"> ⭐</button>
+            <span class="tag">Govt Portals</span>
+        </div>
+        <p>Official portals for PM SuryaGhar scheme and DCR documentation.</p>
+        <div class="links">
+            <a href="https://pmsuryaghar.gov.in/#/" target="_blank">PM SuryaGhar Portal</a>
+            <a href="https://solardcrportal.nise.res.in/" target="_blank">DCR Portal</a>
+        </div>
+       </article>
+
+    <article class="card" data-category="dashboard billing tool">
+      <div class="card-header">
+        <h3>💳 Billing & Invoicing</h3>
+        <button class="fav-btn" title="Pin"> ⭐</button>
+        <span class="tag">Internal</span>
+      </div>
+      <p>Create invoices, track payments & manage billing.</p>
+      <div class="links">
+        <a href="https://mybillbook.in/" target="_blank">Open MyBillBook</a>
+      </div>
+    </article>
+    
+
+<article class="card" data-category="dashboard reports">
+  <h3>📊 Reports</h3>
+  <button class="fav-btn" title="Pin"> ⭐</button>
+  <p>Analytics & exports.</p>
+</article>
+
+    <article class="card" data-category="dashboard">
+      <div class="card-header">
+        <h3>🧾 Quotation Tools</h3>
+        <button class="fav-btn" title="Pin"> ⭐</button>
+        <span class="tag">Proposals</span>
+      </div>
+      <p>Generate quotations using SolarBee and MyBillBook store.</p>
+      <div class="links">
+        <a href="https://onehub.solarbee.in/" target="_blank">SolarBee OneHub</a>
+        <a href="https://mybillbook.in/store/bhakti_solar_energy" target="_blank">MyBillBook Quotation Store</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="dashboard">
+      <div class="card-header">
+        <h3>🔢 Solar Calculators</h3>
+        <button class="fav-btn" title="Pin"> ⭐</button>
+        <span class="tag">Sizing</span>
+      </div>
+      <p>Calculate system size & savings.</p>
+      <div class="links">
+        <a href="hybridsolar.html" target="_blank">Hybrid Solar Calculator</a>
+        <a href="ongridsolar.html" target="_blank">Ongrid Savings Calculator</a>
+        <a href="3 kW Ongrid.html" target="_blank">3 kW Ongrid Calculator</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="dashboard utility">
+      <div class="card-header">
+        <h3>🛠 Utility</h3>
+        <button class="fav-btn" title="Pin"> ⭐</button>
+        <span class="tag">Documents</span>
+      </div>
+      <p>Generate receipts and vendor agreements.</p>
+      <div class="links">
+        <a href="receipt_utility2.html" target="_blank">Money Receipt Generator</a>
+        <a href="vedor_utility.html" target="_blank">Vendor Agreement Generator</a>
+      </div>
+    </article>
+    </section>
+  </main>
+
+</div>
+
+<script>
+function updateStats() {
+  const cards = document.querySelectorAll(".card");
+
+  let tools = 0;
+  let utilities = 0;
+  let links = 0;
+
+  cards.forEach(card => {
+    const cats = (card.dataset.category || "").split(" ");
+
+    if (cats.includes("tool")) tools++;
+    if (cats.includes("utility")) utilities++;
+
+    // count links inside cards
+    links += card.querySelectorAll("a").length;
+  });
+
+  document.getElementById("statTools").innerText = tools;
+  document.getElementById("statUtilities").innerText = utilities;
+  document.getElementById("statLinks").innerText = links;
+}
+
+updateStats();
+</script>
+<script>
+function animateCount(el, value) {
+  let start = 0;
+  const speed = 20;
+
+  const timer = setInterval(() => {
+    start++;
+    el.innerText = start;
+    if (start >= value) clearInterval(timer);
+  }, speed);
+}
+
+animateCount(statTools, parseInt(statTools.innerText));
+animateCount(statUtilities, parseInt(statUtilities.innerText));
+animateCount(statLinks, parseInt(statLinks.innerText));
+
+// example placeholder
+document.getElementById("statUsers").innerText = "Admin + Staff";
+
+</script>
+
+<script>
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("mousemove", e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty("--x", e.clientX - r.left + "px");
+    card.style.setProperty("--y", e.clientY - r.top + "px");
+  });
+});
+</script>
+
+<script>
+const REC_KEY = "user_interest_score";
+let interest = JSON.parse(localStorage.getItem(REC_KEY)) || {};
+
+// track clicks
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", e => {
+    if (e.target.tagName === "A") return; // allow normal link click
+
+    const cats = (card.dataset.category || "").split(" ");
+    cats.forEach(cat => {
+      interest[cat] = (interest[cat] || 0) + 1;
+    });
+
+    localStorage.setItem(REC_KEY, JSON.stringify(interest));
+  });
+});
+
+
+// apply recommendations
+function applyRecommendations(){
+  const maxInterest = Math.max(...Object.values(interest), 0);
+
+  document.querySelectorAll(".card").forEach(card => {
+    const cats = (card.dataset.category || "").split(" ");
+    let score = 0;
+
+    cats.forEach(c => score += interest[c] || 0);
+
+    if(score === maxInterest && score > 0){
+      card.classList.add("recommended");
+      card.style.order = -2; // float to top
+    }
+  });
+}
+
+applyRecommendations();
+</script>
+
+<script>
+    const favKey = "dashboard_favorites";
+let favorites = JSON.parse(localStorage.getItem(favKey)) || [];
+
+document.querySelectorAll(".fav-btn").forEach((btn, index) => {
+  const card = btn.closest(".card");
+
+  // restore favorite
+  if (favorites.includes(index)) {
+    btn.classList.add("active");
+    card.style.order = -1;
+  }
+
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+
+    btn.classList.toggle("active");
+
+    if (btn.classList.contains("active")) {
+      favorites.push(index);
+      card.style.order = -1;
+    } else {
+      favorites = favorites.filter(i => i !== index);
+      card.style.order = "";
+    }
+
+    localStorage.setItem(favKey, JSON.stringify(favorites));
+  });
+});
+
+</script>
+
+<script>
+    function updateSidebarCounts(){
+  sidebarLinks.forEach(link => {
+    const filter = link.dataset.filter;
+    const countEl = link.querySelector(".count");
+
+    let count = 0;
+
+    cards.forEach(card => {
+      const cats = (card.dataset.category || "").split(" ");
+      if (filter === "all" || cats.includes(filter)) count++;
+    });
+
+    if (countEl) countEl.innerText = count;
+  });
+}
+
+// call once on load
+updateSidebarCounts();
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const sidebarLinks = document.querySelectorAll(".sidebar a[data-filter]");
+  const cards = document.querySelectorAll(".card");
+  const searchInput = document.getElementById("searchInput");
+
+  let activeFilter = "all";
+
+  // show all initially
+  cards.forEach(card => card.classList.add("show"));
+
+  function applyFilters(){
+    const searchText = searchInput.value.toLowerCase();
+
+    cards.forEach(card => {
+      const categoryAttr = card.dataset.category || "";
+      const categories = categoryAttr.split(" ");
+      const text = card.innerText.toLowerCase();
+
+      const matchCategory =
+        activeFilter === "all" || categories.includes(activeFilter);
+
+      const matchSearch = text.includes(searchText);
+
+      if (matchCategory && matchSearch) {
+        card.classList.remove("hide");
+        card.classList.add("show");
+      } else {
+        card.classList.remove("show");
+        card.classList.add("hide");
+      }
+    });
+  }
+
+  // sidebar click
+  sidebarLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      activeFilter = link.dataset.filter;
+
+      sidebarLinks.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+
+      applyFilters();
+    });
+  });
+
+  // live search
+  searchInput.addEventListener("input", applyFilters);
+
+});
+</script>
+
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
   getAuth,
@@ -576,151 +767,110 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-/* =======================
-   FIREBASE CONFIG
-======================= */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyCyIakQ4jzv_z7k_yXvBliTOqg687ZKjHk",
   authDomain: "pragati-dashboard.firebaseapp.com",
   projectId: "pragati-dashboard",
-  storageBucket: "pragati-dashboard.firebasestorage.app",
+  storageBucket: "pragati-dashboard.appspot.com",
   messagingSenderId: "580069668292",
-  appId: "1:580069668292:web:70115744e2f5a83e016091",
-  measurementId: "G-MYV9XGW3X1"
+  appId: "1:580069668292:web:70115744e2f5a83e016091"
 };
 
-/* =======================
-   INIT
-======================= */
+/* INIT */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-/* =======================
-   UI HELPERS
-======================= */
-function showDashboard() {
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
-}
+/* ELEMENTS */
+const loginPage = document.getElementById("loginPage");
+const appLayout = document.getElementById("appLayout");
+const loginError = document.getElementById("loginError");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const userEmail = document.getElementById("userEmail");
+const userEmailSidebar = document.getElementById("userEmailSidebar");
 
-function showLogin() {
-  document.getElementById("dashboard").style.display = "none";
-  document.getElementById("loginPage").style.display = "flex";
-}
+/* LOGIN */
+window.login = () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
 
-/* =======================
-   LOGIN
-======================= */
-window.login = function () {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const error = document.getElementById("loginError");
-
-  error.innerText = "";
+  loginError.innerText = "";
 
   if (!email || !password) {
-    error.innerText = "⚠️ Email and password required";
+    loginError.innerText = "⚠️ Email & password required";
     return;
   }
 
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      showDashboard();
-    })
-    .catch(err => {
-      error.innerText = "❌ " + err.message;
-    });
+    .catch(err => loginError.innerText = err.message);
 };
 
-/* =======================
-   REGISTER
-======================= */
-window.register = function () {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const error = document.getElementById("loginError");
-
-  error.innerText = "";
-
-  if (!email || !password) {
-    error.innerText = "⚠️ Email and password required";
-    return;
-  }
-
-  if (password.length < 6) {
-    error.innerText = "⚠️ Password must be at least 6 characters";
-    return;
-  }
+/* REGISTER */
+window.register = () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
 
   createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      alert("✅ Account created successfully");
-      showDashboard();
-    })
-    .catch(err => {
-      error.innerText = "❌ " + err.message;
-    });
+    .then(() => alert("✅ Account created"))
+    .catch(err => loginError.innerText = err.message);
 };
 
-/* =======================
-   LOGOUT
-======================= */
-window.logout = function () {
-  signOut(auth).then(() => {
-    showLogin();
-  });
-};
-
-/* =======================
-   PASSWORD RESET (EMAIL OTP)
-======================= */
-window.resetPassword = function () {
-  const email = document.getElementById("email").value.trim();
+/* RESET PASSWORD */
+window.resetPassword = () => {
+  const email = emailInput.value.trim();
 
   if (!email) {
-    alert("⚠️ Enter your email first");
+    alert("Enter email first");
     return;
   }
 
   sendPasswordResetEmail(auth, email)
-    .then(() => {
-      alert("📩 Password reset link sent to your email");
-    })
-    .catch(err => {
-      alert("❌ " + err.message);
-    });
+    .then(() => alert("📩 Password reset email sent"))
+    .catch(err => alert(err.message));
 };
 
-/* =======================
-   AUTO LOGIN ON REFRESH
-======================= */
+/* LOGOUT */
+window.logout = () => signOut(auth);
+
+/* SESSION RESTORE */
 onAuthStateChanged(auth, user => {
   if (user) {
-    showDashboard();
+    loginPage.style.display = "none";
+    appLayout.style.display = "flex";
+    userEmail.innerText = user.email;
+    userEmailSidebar.innerText = user.email;
   } else {
-    showLogin();
+    loginPage.style.display = "flex";
+    appLayout.style.display = "none";
   }
 });
 
-/* =======================
-   ENTER KEY LOGIN
-======================= */
-document.addEventListener("keydown", e => {
-  if (e.key === "Enter") login();
-});
-
-/* =======================
-   SEARCH FILTER
-======================= */
-window.filterCards = function () {
-  const input = document.getElementById("searchInput").value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(input)
-      ? ""
-      : "none";
-  });
+window.toggleSidebar = () => {
+  document.querySelector(".sidebar").classList.toggle("open");
 };
+
+window.toggleTheme = () => {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("theme",
+    document.body.classList.contains("dark") ? "dark" : "light"
+  );
+};
+
+if(localStorage.getItem("theme")==="dark"){
+  document.body.classList.add("dark");
+}
+
 </script>
+<script>
+    document.querySelector('[data-filter="utility"]')
+  .innerHTML += ` <small>(${document.querySelectorAll('[data-category*="utility"]').length})</small>`;
+
+</script>
+
 
 </body>
 </html>
+
+
+
