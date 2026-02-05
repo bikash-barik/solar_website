@@ -347,9 +347,24 @@ body.dark{
   transition:.25s;
 }
 
-  .links a{display:block;color:#38bdf8;text-decoration:none;margin:6px 0}
+.links a{display:block;color:#38bdf8;text-decoration:none;margin:6px 0}
 iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
+
+.dashboard-locked .card {
+  pointer-events: none;
+  opacity: 0.4;
+  filter: blur(1px);
+}
+
+.dashboard-locked .card.active {
+  pointer-events: auto;
+  opacity: 1;
+  filter: none;
+}
+
 </style>
+
+
 </head>
 
 <body>
@@ -465,7 +480,10 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
 
     <h2 class="section-title">Quick Links</h2>
 
-    <section class="container">
+    
+     
+    <section class="container" id="dashboardCards">
+
        <article class="card" data-category="dashboard">
 
       <div class="card-header">
@@ -537,11 +555,12 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
         <a href="ongridsolar.html" target="_blank">Ongrid Savings Calculator</a>
         <a href="3 kW Ongrid.html" target="_blank">3 kW Ongrid Calculator</a>
       </div> -->
-       <div class="links">
+      <div class="links">
   <a href="#" onclick="loadPage('hybridsolar')">Hybrid Solar Calculator</a>
   <a href="#" onclick="loadPage('ongridsolar')">Ongrid Savings Calculator</a>
   <a href="#" onclick="loadPage('3kwongrid')">3 kW Ongrid Calculator</a>
 </div>
+
     </article>
 
     <article class="card" data-category="dashboard utility">
@@ -551,30 +570,58 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
         <span class="tag">Documents</span>
       </div>
       <p>Generate receipts and vendor agreements.</p>
-      <!-- <div class="links">
-        <a href="receipt_utility2.html" target="_blank">Money Receipt Generator</a>
-        <a href="vedor_utility.html" target="_blank">Vendor Agreement Generator</a>
-      </div> -->
-        <div class="links">
+      <div class="links">
          <a href="#" onclick="loadPage('moneyreceipt')">Money Receipt Generator</a>
-          <a href="#" onclick="loadPage('vendor')">Vendor Agreement Generator</a>
+          <a href="#" onclick="loadPage('vendor', this)">Vendor Agreement Generator</a>
+
       </div>
     </article>
+    
     </section>
+ 
+<!-- 🔒 PROTECTED CONTENT AREA -->
+<hr id="toolDivider" style="display:none;">
+
+<div id="toolWrapper" style="display:none;">
+  <iframe id="toolFrame"></iframe>
+
+  <button id="closeTool" onclick="unlockDashboard()">
+    ⬅ Back to Dashboard
+  </button>
+</div>
+
   </main>
 
 </div>
-  <hr>
-<!-- 🔒 PROTECTED CONTENT AREA -->
-  <iframe id="toolFrame"></iframe>
+
+
 
 
 <script>
-function loadPage(page) {
-  if (!window.auth || !auth.currentUser) {
+function unlockDashboard() {
+  const frame = document.getElementById("toolFrame");
+
+  frame.src = "";
+
+  document.getElementById("toolWrapper").style.display = "none";
+  document.getElementById("toolDivider").style.display = "none";
+
+  document.getElementById("dashboardCards").classList.remove("dashboard-locked");
+
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+}
+</script>
+
+<script>
+function loadPage(page, el) {
+  if (!window.auth || !window.auth.currentUser) {
     alert("❌ Login required");
     return;
   }
+
+  const frame = document.getElementById("toolFrame");
+  const wrapper = document.getElementById("toolWrapper");
+  const divider = document.getElementById("toolDivider");
 
   const pages = {
     hybridsolar: "_hybridsolar.html",
@@ -584,9 +631,23 @@ function loadPage(page) {
     vendor: "_vendor.html",
   };
 
-  toolFrame.src = pages[page];
+  frame.src = pages[page];
+
+  wrapper.style.display = "block";   // ✅ show iframe area
+  divider.style.display = "block";   // ✅ show hr
+
+  document.getElementById("dashboardCards").classList.add("dashboard-locked");
+
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+  el.closest(".card").classList.add("active");
 }
+
 </script>
+
+
+
+
+
 
 <script>
 function updateStats() {
@@ -814,6 +875,8 @@ const firebaseConfig = {
 /* INIT */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+window.auth = auth;   // ✅ THIS IS THE FIX
+
 
 /* ELEMENTS */
 const loginPage = document.getElementById("loginPage");
