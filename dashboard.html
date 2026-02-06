@@ -722,8 +722,6 @@ document.querySelectorAll(".card").forEach(card => {
     localStorage.setItem(REC_KEY, JSON.stringify(interest));
   });
 });
-
-
 // apply recommendations
 function applyRecommendations(){
   const maxInterest = Math.max(...Object.values(interest), 0);
@@ -743,6 +741,7 @@ function applyRecommendations(){
 
 applyRecommendations();
 </script>
+
 
 <script>
     const favKey = "dashboard_favorites";
@@ -935,7 +934,7 @@ onAuthStateChanged(auth, user => {
   if (user) {
     loginPage.style.display = "none";
     appLayout.style.display = "flex";
-    userEmail.innerText = user.email;
+    // userEmail.innerText = user.email;
     userEmailSidebar.innerText = user.email;
   } else {
     loginPage.style.display = "flex";
