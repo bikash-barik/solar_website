@@ -384,7 +384,7 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
     <input type="password" id="password" placeholder="Password">
 
     <button class="btn-primary" onclick="login()">Login</button>
-    <button class="btn-secondary" onclick="register()">Register</button>
+    <!-- <button class="btn-secondary" onclick="register()">Register</button> -->
     <button class="btn-link" onclick="resetPassword()">Forgot Password?</button>
 
     <div id="loginError" class="error"></div>
@@ -581,6 +581,23 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
     </article>
     
     </section>
+
+    <div class="admin-only">
+  <h3>User Management</h3>
+
+  <!-- Add User -->
+  <input id="newEmail" placeholder="Email">
+  <input id="newPassword" type="password" placeholder="Password">
+  <select id="newRole">
+    <option value="staff">Staff</option>
+    <option value="admin">Admin</option>
+  </select>
+  <button onclick="addUser()">Add User</button>
+  <p id="addUserMsg"></p>
+
+  <!-- User List -->
+  <div id="userList"></div>
+</div>
  
 <!-- 🔒 PROTECTED CONTENT AREA -->
 <hr id="toolDivider" style="display:none;">
@@ -854,112 +871,284 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script type="module">
+/* ===============================
+   🔥 FIREBASE IMPORTS
+================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
 import {
   getAuth,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   onAuthStateChanged,
-  signOut
+  signOut,
+  createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
-/* FIREBASE CONFIG */
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  getDocs,
+  collection,
+  deleteDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+/* ===============================
+   🔧 FIREBASE CONFIG
+================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyCyIakQ4jzv_z7k_yXvBliTOqg687ZKjHk",
   authDomain: "pragati-dashboard.firebaseapp.com",
   projectId: "pragati-dashboard",
-  storageBucket: "pragati-dashboard.appspot.com",
+  storageBucket: "pragati-dashboard.firebasestorage.app",
   messagingSenderId: "580069668292",
-  appId: "1:580069668292:web:70115744e2f5a83e016091"
+  appId: "1:580069668292:web:70115744e2f5a83e016091",
+  measurementId: "G-MYV9XGW3X1"
 };
 
-/* INIT */
+/* ===============================
+   🚀 INIT APPS
+================================ */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-window.auth = auth;   // ✅ THIS IS THE FIX
+const db = getFirestore(app);
 
+const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+const secondaryAuth = getAuth(secondaryApp);
 
-/* ELEMENTS */
+let CURRENT_USER_ROLE = null;
+
+/* ===============================
+   🎯 ELEMENTS
+================================ */
 const loginPage = document.getElementById("loginPage");
 const appLayout = document.getElementById("appLayout");
 const loginError = document.getElementById("loginError");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
-const userEmail = document.getElementById("userEmail");
 const userEmailSidebar = document.getElementById("userEmailSidebar");
+const statUsers = document.getElementById("statUsers");
 
-/* LOGIN */
-window.login = () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+/* ===============================
+   🔐 LOGIN
+================================ */
+window.login = async () => {
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      emailInput.value.trim(),
+      passwordInput.value
+    );
+  } catch (err) {
+    loginError.innerText = err.message;
+  }
+};
 
-  loginError.innerText = "";
 
-  if (!email || !password) {
-    loginError.innerText = "⚠️ Email & password required";
+/* ===============================
+   ♻️ SESSION HANDLER
+================================ */
+
+function animateCount(el, value) {
+  let start = 0;
+  const speed = 20;
+
+  el.innerText = "0";
+
+  const timer = setInterval(() => {
+    start++;
+    el.innerText = start;
+    if (start >= value) clearInterval(timer);
+  }, speed);
+}
+
+async function loadUserStats() {
+  if (CURRENT_USER_ROLE !== "admin") {
+    statUsers.innerText = "—";
     return;
   }
 
-  signInWithEmailAndPassword(auth, email, password)
-    .catch(err => loginError.innerText = err.message);
-};
+  const snap = await getDocs(collection(db, "users"));
+  console.log("USER COUNT:", snap.size);
 
-/* REGISTER */
-window.register = () => {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
+  animateCount(statUsers, snap.size);
+}
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => alert("✅ Account created"))
-    .catch(err => loginError.innerText = err.message);
-};
-
-/* RESET PASSWORD */
-window.resetPassword = () => {
-  const email = emailInput.value.trim();
-
-  if (!email) {
-    alert("Enter email first");
-    return;
-  }
-
-  sendPasswordResetEmail(auth, email)
-    .then(() => alert("📩 Password reset email sent"))
-    .catch(err => alert(err.message));
-};
-
-/* LOGOUT */
-window.logout = () => signOut(auth);
-
-/* SESSION RESTORE */
-onAuthStateChanged(auth, user => {
-  if (user) {
-    loginPage.style.display = "none";
-    appLayout.style.display = "flex";
-    // userEmail.innerText = user.email;
-    userEmailSidebar.innerText = user.email;
-  } else {
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
     loginPage.style.display = "flex";
     appLayout.style.display = "none";
+    return;
+  }
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+
+  if (!snap.exists()) {
+    await signOut(auth);
+    alert("Access denied");
+    return;
+  }
+
+  const data = snap.data();
+
+  if (!data.canLogin) {
+    await signOut(auth);
+    alert("Account disabled");
+    return;
+  }
+
+  CURRENT_USER_ROLE = data.role;
+
+  loginPage.style.display = "none";
+  appLayout.style.display = "flex";
+  userEmailSidebar.innerText = data.email;
+
+  applyRolePermissions();
+
+  if (CURRENT_USER_ROLE === "admin") {
+    loadUsers();
+    loadUserStats(); 
   }
 });
 
+/* ===============================
+   🔒 ROLE UI CONTROL
+================================ */
+function applyRolePermissions() {
+  document.querySelectorAll(".admin-only").forEach(el => {
+    el.style.display = CURRENT_USER_ROLE === "admin" ? "block" : "none";
+  });
+}
 window.toggleSidebar = () => {
   document.querySelector(".sidebar").classList.toggle("open");
 };
 
 window.toggleTheme = () => {
   document.body.classList.toggle("dark");
-  localStorage.setItem("theme",
+  localStorage.setItem(
+    "theme",
     document.body.classList.contains("dark") ? "dark" : "light"
   );
 };
 
-if(localStorage.getItem("theme")==="dark"){
+if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
 }
+/* ===============================
+   ➕ ADD USER (ADMIN ONLY)
+================================ */
+window.addUser = async () => {
+  if (CURRENT_USER_ROLE !== "admin") {
+    alert("Admin only");
+    return;
+  }
 
+  const email = newEmail.value.trim();
+  const password = newPassword.value;
+  const role = newRole.value;
+  const msg = addUserMsg;
+
+  if (!email || !password) {
+    msg.innerText = "Email & password required";
+    return;
+  }
+
+  try {
+    const cred = await createUserWithEmailAndPassword(
+      secondaryAuth,
+      email,
+      password
+    );
+
+    await setDoc(doc(db, "users", cred.user.uid), {
+      email,
+      role,
+      canLogin: true,
+      createdAt: serverTimestamp()
+    });
+
+    await signOut(secondaryAuth);
+    msg.innerText = "User added";
+    loadUsers();
+
+  } catch (err) {
+    msg.innerText = err.message;
+  }
+};
+
+/* ===============================
+   👥 LOAD USERS
+================================ */
+async function loadUsers() {
+  if (CURRENT_USER_ROLE !== "admin") return;
+
+  const snap = await getDocs(collection(db, "users"));
+  userList.innerHTML = "";
+
+  snap.forEach(d => {
+    const u = d.data();
+    userList.innerHTML += `
+      <div>
+        <b>${u.email}</b> (${u.role})
+        ${u.canLogin
+          ? `<button onclick="blockUser('${d.id}')">Block</button>`
+          : `<button onclick="unblockUser('${d.id}')">Unblock</button>`
+        }
+        ${d.id !== auth.currentUser.uid
+  ? `<button onclick="deleteUser('${d.id}')">Delete</button>`
+  : '<em>(You)</em>'
+}
+      </div>
+    `;
+  });
+}
+
+
+/* ===============================
+   🚫 USER ACTIONS
+================================ */
+window.blockUser = async (uid) => {
+  await updateDoc(doc(db, "users", uid), { canLogin: false });
+  loadUsers();
+};
+
+window.unblockUser = async (uid) => {
+  await updateDoc(doc(db, "users", uid), { canLogin: true });
+  loadUsers();
+};
+
+
+
+window.deleteUser = async (uid) => {
+  if (CURRENT_USER_ROLE !== "admin") return;
+
+  if (!confirm("Delete this user permanently?")) return;
+
+  await deleteDoc(doc(db, "users", uid));
+  loadUsers();
+};
+
+
+/* ===============================
+   🚪 LOGOUT
+================================ */
+window.logout = async () => {
+  await signOut(auth);
+  loginPage.style.display = "flex";
+  appLayout.style.display = "none";
+};
+
+/* ===============================
+   🔁 RESET PASSWORD
+================================ */
+window.resetPassword = () => {
+  sendPasswordResetEmail(auth, emailInput.value.trim())
+    .then(() => alert("Reset email sent"))
+    .catch(err => alert(err.message));
+};
 </script>
 <script>
     document.querySelector('[data-filter="utility"]')
