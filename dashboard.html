@@ -632,7 +632,7 @@ function unlockDashboard() {
 }
 </script>
 
-<script>
+<!-- <script>
 function loadPage(page, el) {
   if (!window.auth || !window.auth.currentUser) {
     alert("❌ Login required");
@@ -662,7 +662,7 @@ function loadPage(page, el) {
   el.closest(".card").classList.add("active");
 }
 
-</script>
+</script> -->
 
 
 
@@ -977,42 +977,64 @@ async function loadUserStats() {
   animateCount(statUsers, snap.size);
 }
 
+let userReady = false;
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     loginPage.style.display = "flex";
     appLayout.style.display = "none";
+    userReady = false;
     return;
   }
 
   const snap = await getDoc(doc(db, "users", user.uid));
 
-  if (!snap.exists()) {
+  if (!snap.exists() || !snap.data().canLogin) {
     await signOut(auth);
-    alert("Access denied");
+    alert(!snap.exists() ? "Access denied" : "Account disabled");
+    userReady = false;
     return;
   }
 
-  const data = snap.data();
-
-  if (!data.canLogin) {
-    await signOut(auth);
-    alert("Account disabled");
-    return;
-  }
-
-  CURRENT_USER_ROLE = data.role;
+  CURRENT_USER_ROLE = snap.data().role;
 
   loginPage.style.display = "none";
   appLayout.style.display = "flex";
-  userEmailSidebar.innerText = data.email;
+  userEmailSidebar.innerText = snap.data().email;
+  userReady = true;
 
   applyRolePermissions();
 
   if (CURRENT_USER_ROLE === "admin") {
     loadUsers();
-    loadUserStats(); 
+    loadUserStats();
   }
 });
+
+// at the bottom of your JS
+window.loadPage = function(page, el) {
+  if (!userReady) {
+    alert("⏳ Checking login, please wait...");
+    return;
+  }
+
+  const pages = {
+    hybridsolar: "_hybridsolar.html",
+    ongridsolar: "_ongridsolar.html",
+    "3kwongrid": "_3kw_ongrid.html",
+    moneyreceipt: "_receipt.html",
+    vendor: "_vendor.html",
+  };
+
+  const frame = document.getElementById("toolFrame");
+  frame.src = pages[page];
+  document.getElementById("toolWrapper").style.display = "block";
+  document.getElementById("toolDivider").style.display = "block";
+  frame.style.height = "600px";
+
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+  if (el.closest(".card")) el.closest(".card").classList.add("active");
+};
 
 /* ===============================
    🔒 ROLE UI CONTROL
