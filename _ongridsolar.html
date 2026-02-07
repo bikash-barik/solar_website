@@ -3,14 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script>
-  // ❌ Block direct access
+  <script>
   if (window.top === window.self) {
-    document.body.innerHTML = `
-      <div style="display:flex;height:100vh;align-items:center;
-      justify-content:center;font-family:Poppins;background:#020617;color:#fff">
-        <h2>❌ Access denied<br><small>Open via Dashboard only</small></h2>
-      </div>`;
+    document.body.innerHTML = `... Access denied ...`;
     throw new Error("Blocked");
   }
 </script>
