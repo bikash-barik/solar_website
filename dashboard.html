@@ -457,6 +457,7 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
   <div class="stat-card">
     <h3>👥 Users</h3>
     <p id="statUsers">0</p>
+
   </div>
 
   <div class="stat-card">
@@ -525,11 +526,8 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
     
 
 <article class="card" data-category="dashboard reports">
-  <div class="card-header">
   <h3>📊 Reports</h3>
   <button class="fav-btn" title="Pin"> ⭐</button>
-  <span class="tag">Report</span>
-  </div>
   <p>Analytics & exports.</p>
 </article>
 
@@ -553,15 +551,11 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
         <span class="tag">Sizing</span>
       </div>
       <p>Calculate system size & savings.</p>
-      <!-- <div class="links">
-        <a href="hybridsolar.html" target="_blank">Hybrid Solar Calculator</a>
-        <a href="ongridsolar.html" target="_blank">Ongrid Savings Calculator</a>
-        <a href="3 kW Ongrid.html" target="_blank">3 kW Ongrid Calculator</a>
-      </div> -->
+   
       <div class="links">
-  <a href="#" onclick="loadPage('hybridsolar', this)">Hybrid Solar Calculator</a>
-  <a href="#" onclick="loadPage('ongridsolar', this)">Ongrid Savings Calculator</a>
-  <a href="#" onclick="loadPage('3kwongrid', this)">3 kW Ongrid Calculator</a>
+  <a href="#" onclick="loadPage('hybridsolar',this)">Hybrid Solar Calculator</a>
+  <a href="#" onclick="loadPage('ongridsolar',this)">Ongrid Savings Calculator</a>
+  <a href="#" onclick="loadPage('3kwongrid',this)">3 kW Ongrid Calculator</a>
 </div>
 
     </article>
@@ -574,7 +568,7 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
       </div>
       <p>Generate receipts and vendor agreements.</p>
       <div class="links">
-         <a href="#" onclick="loadPage('moneyreceipt', this)">Money Receipt Generator</a>
+         <a href="#" onclick="loadPage('moneyreceipt',this)">Money Receipt Generator</a>
           <a href="#" onclick="loadPage('vendor', this)">Vendor Agreement Generator</a>
 
       </div>
@@ -582,7 +576,9 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
     
     </section>
 
-    <div class="admin-only">
+
+
+<div class="admin-only">
   <h3>User Management</h3>
 
   <!-- Add User -->
@@ -598,6 +594,7 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
   <!-- User List -->
   <div id="userList"></div>
 </div>
+
  
 <!-- 🔒 PROTECTED CONTENT AREA -->
 <hr id="toolDivider" style="display:none;">
@@ -613,8 +610,6 @@ iframe{width:100%;height:85vh;border:none;border-radius:16px;background:#fff}
   </main>
 
 </div>
-
-
 
 
 <script>
@@ -1123,6 +1118,9 @@ window.resetPassword = () => {
     .catch(err => alert(err.message));
 };
 </script>
+
+
+
 <script>
     document.querySelector('[data-filter="utility"]')
   .innerHTML += ` <small>(${document.querySelectorAll('[data-category*="utility"]').length})</small>`;
