@@ -503,7 +503,7 @@ window.resetPassword = () => {
 };
 
 
-
+</script>
 
 
     document.querySelector('[data-filter="utility"]')
