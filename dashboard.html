@@ -632,40 +632,6 @@ function unlockDashboard() {
 }
 </script>
 
-<!-- <script>
-function loadPage(page, el) {
-  if (!window.auth || !window.auth.currentUser) {
-    alert("❌ Login required");
-    return;
-  }
-
-  const frame = document.getElementById("toolFrame");
-  const wrapper = document.getElementById("toolWrapper");
-  const divider = document.getElementById("toolDivider");
-
-  const pages = {
-    hybridsolar: "_hybridsolar.html",
-    ongridsolar: "_ongridsolar.html",
-    "3kwongrid": "_3kw_ongrid.html",
-    moneyreceipt: "_receipt.html",
-    vendor: "_vendor.html",
-  };
-
-  frame.src = pages[page];
-
-  wrapper.style.display = "block";   // ✅ show iframe area
-  divider.style.display = "block";   // ✅ show hr
-
-  document.getElementById("dashboardCards").classList.add("dashboard-locked");
-
-  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
-  el.closest(".card").classList.add("active");
-}
-
-</script> -->
-
-
-
 
 
 
@@ -683,7 +649,6 @@ function updateStats() {
     if (cats.includes("tool")) tools++;
     if (cats.includes("utility")) utilities++;
 
-    // count links inside cards
     links += card.querySelectorAll("a").length;
   });
 
@@ -692,28 +657,10 @@ function updateStats() {
   document.getElementById("statLinks").innerText = links;
 }
 
-updateStats();
+document.addEventListener("DOMContentLoaded", updateStats);
 </script>
-<!-- <script>
-function animateCount(el, value) {
-  let start = 0;
-  const speed = 20;
 
-  const timer = setInterval(() => {
-    start++;
-    el.innerText = start;
-    if (start >= value) clearInterval(timer);
-  }, speed);
-}
 
-animateCount(statTools, parseInt(statTools.innerText));
-animateCount(statUtilities, parseInt(statUtilities.innerText));
-animateCount(statLinks, parseInt(statLinks.innerText));
-
-// example placeholder
-document.getElementById("statUsers").innerText = "Admin + Staff";
-
-</script> -->
 
 <script>
 document.querySelectorAll(".card").forEach(card => {
@@ -761,7 +708,6 @@ function applyRecommendations(){
 
 applyRecommendations();
 </script>
-
 
 <script>
     const favKey = "dashboard_favorites";
@@ -869,7 +815,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-
 <script type="module">
 /* ===============================
    🔥 FIREBASE IMPORTS
@@ -921,6 +866,9 @@ const secondaryAuth = getAuth(secondaryApp);
 
 let CURRENT_USER_ROLE = null;
 
+
+
+
 /* ===============================
    🎯 ELEMENTS
 ================================ */
@@ -951,6 +899,8 @@ window.login = async () => {
 /* ===============================
    ♻️ SESSION HANDLER
 ================================ */
+
+
 
 function animateCount(el, value) {
   let start = 0;
@@ -1035,6 +985,7 @@ window.loadPage = function(page, el) {
   document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
   if (el.closest(".card")) el.closest(".card").classList.add("active");
 };
+
 
 /* ===============================
    🔒 ROLE UI CONTROL
