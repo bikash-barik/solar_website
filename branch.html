@@ -35,56 +35,69 @@
     <style>
 /* Section Styling */
 .branches-section {
-    background: linear-gradient(135deg, #f8fbff, #eef5ff);
-    padding: 80px 0;
+    background-color: #f4f6f9;
+    padding: 70px 0;
 }
 
-/* Card Styling */
+/* Heading */
+.branches-section h1 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.branches-section h6 {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Card */
 .branch-card {
-    border: none;
-    border-radius: 18px;
-    overflow: hidden;
-    transition: all 0.4s ease;
     background: #ffffff;
+    border: 1px solid #e3e6ea;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
 .branch-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    border-color: #0d6efd;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
 /* Title */
 .branch-title {
+    font-size: 17px;
     font-weight: 600;
-    font-size: 18px;
+    color: #2c3e50;
     margin-bottom: 15px;
 }
 
-/* Map responsive container */
-.map-container {
+/* Map wrapper */
+.map-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 75%;
-    border-radius: 12px;
+    padding-bottom: 70%;
     overflow: hidden;
+    border-radius: 6px;
 }
 
-.map-container iframe {
+.map-wrapper iframe {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     border: 0;
 }
 
-/* Responsive improvements */
+/* Responsive */
 @media (max-width: 768px) {
-    .branch-card {
-        margin-bottom: 20px;
+    .branches-section {
+        padding: 50px 15px;
     }
 }
+
 </style>
+
+
 
 </head>
 
@@ -171,6 +184,9 @@
 
 
     <!-- Page Header Start -->
+
+
+    
     <div class="container-fluid page-header py-5 mb-5">
         <div class="container py-5">
             <h1 class="display-3 text-white mb-3 animated slideInDown">Our Branch</h1>
@@ -185,9 +201,137 @@
     </div>
     <!-- Page Header End -->
 
+<div class="container-fluid branches-section">
+    <div class="container">
+
+        <div class="text-center mb-5">
+            <h6 class="text-primary">Our Branch Network</h6>
+            <h1>Pragati EcoSolar</h1>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Branch Card -->
+            <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Khamar (Anugul)</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Angul,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Rayagada</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Rayagada,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Khurda</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Khurda,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Koraput</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Koraput,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">balasore</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Balasore,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">kalahandi</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Kalahandi,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Bhadrak</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Bhadrak,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Jajpur</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Jajpur,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-4 col-md-6">
+                <div class="branch-card p-4 h-100">
+                    <h5 class="branch-title">Cuttack</h5>
+
+                    <div class="map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps?q=Cuttack,Odisha&output=embed"
+                          loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
 
 
-<div class="col-lg-12 bg-white d-flex justify-content-center">
+
+    
+<!-- <div class="col-lg-12 bg-white d-flex justify-content-center">
     <div class="p-5 w-100" >
 
         <h6 class="text-primary text-center">Our Branches</h6>
@@ -328,7 +472,7 @@
             </iframe>
         </div>
     </div>
-</div>
+</div> -->
 
 
             <!-- <div class="col-md-3">
@@ -519,11 +663,11 @@
                 </div>
             </div> -->
 
-            
+            <!-- 
         </div>
 
     </div>
-</div>
+</div> -->
 
 
 
